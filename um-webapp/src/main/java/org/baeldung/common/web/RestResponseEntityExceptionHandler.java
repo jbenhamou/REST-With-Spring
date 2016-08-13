@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.baeldung.common.persistence.exception.MyEntityNotFoundException;
 import org.baeldung.common.web.exception.ApiError;
 import org.baeldung.common.web.exception.MyBadRequestException;
@@ -125,7 +126,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private ApiError message(final HttpStatus httpStatus, final Exception ex) {
         final String message = ex.getMessage() == null ? ex.getClass().getSimpleName() : ex.getMessage();
-        final String devMessage = ex.getClass().getSimpleName();
+        final String devMessage = ExceptionUtils.getRootCauseMessage(ex);
+//        final String devMessage = ex.getClass().getSimpleName();
         // devMessage = ExceptionUtils.getStackTrace(ex);
 
         return new ApiError(httpStatus.value(), message, devMessage);
